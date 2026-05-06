@@ -3,7 +3,7 @@ import { tabletApi } from '../api'
 import { CheckCircle, AlertTriangle, Database, Server } from 'lucide-react'
 
 export default function TabletInspector() {
-  const { data: tablets, isLoading } = useQuery({
+  const { data: tablets } = useQuery({
     queryKey: ['tablets'],
     queryFn: tabletApi.list,
     refetchInterval: 15000,

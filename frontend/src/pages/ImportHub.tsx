@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { importApi } from '../api'
-import { Upload, FileText, Clipboard, CheckCircle, AlertTriangle, Package } from 'lucide-react'
+import { Upload, Clipboard, CheckCircle, AlertTriangle, Package } from 'lucide-react'
 
 export default function ImportHub() {
   const [pasteText, setPasteText] = useState('')

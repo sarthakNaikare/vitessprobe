@@ -5,7 +5,7 @@ import { incidentApi, reportApi } from '../api'
 import {
   ArrowLeft, CheckCircle, Clock, Share2,
   FileText, Terminal, Loader2,
-  ExternalLink, Copy, X, AlertCircle
+  ExternalLink, Copy, X
 } from 'lucide-react'
 import ForceGraph from '../components/ForceGraph'
 

@@ -1,4 +1,4 @@
-import { ExternalLink, Github, Linkedin, Briefcase, Code2 } from 'lucide-react'
+import { ExternalLink, Briefcase, Code2 } from 'lucide-react'
 
 export default function About() {
   const projects = [
@@ -69,7 +69,7 @@ export default function About() {
                   rel="noreferrer"
                   className="flex items-center gap-1.5 text-xs border border-stone-200 px-3 py-1.5 rounded-md hover:bg-amber-50 hover:border-copper text-stone-500 hover:text-copper transition-colors font-mono"
                 >
-                  <Github size={12} /> GitHub
+                  <ExternalLink size={12} /> GitHub
                 </a>
                 <a 
                   href="https://linkedin.com/in/sarthak-naikare" 
@@ -77,7 +77,7 @@ export default function About() {
                   rel="noreferrer"
                   className="flex items-center gap-1.5 text-xs border border-stone-200 px-3 py-1.5 rounded-md hover:bg-amber-50 hover:border-copper text-stone-500 hover:text-copper transition-colors font-mono"
                 >
-                  <Linkedin size={12} /> LinkedIn
+                  <ExternalLink size={12} /> LinkedIn
                 </a>
                 <a 
                   href="https://sarthak-naikare.vercel.app" 
