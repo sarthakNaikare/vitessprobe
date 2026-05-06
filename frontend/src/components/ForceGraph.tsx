@@ -85,6 +85,7 @@ export default function ForceGraph({ nodes, edges, onNodeClick }: Props) {
 
     const NODE_R = 32
 
+    const drawRoundRect = (ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) => {
       ctx.beginPath()
       ctx.moveTo(x + r, y)
       ctx.lineTo(x + w - r, y)
