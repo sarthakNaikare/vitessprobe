@@ -30,6 +30,8 @@ class Settings(BaseSettings):
         "http://localhost:5173",
         "http://localhost:3000",
         "https://vitessprobe.vercel.app",
+        "https://vitessprobe-git-main-sarthaknaikare-2390s-projects.vercel.app",
+        "https://vitessprobe-cw5s9ltft-sarthaknaikare-2390s-projects.vercel.app",
     ]
 
     class Config:
