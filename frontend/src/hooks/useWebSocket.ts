@@ -5,7 +5,7 @@ import { addToast } from '../components/Toast'
 export function useWebSocket() {
   const queryClient = useQueryClient()
   const wsRef = useRef<WebSocket | null>(null)
-  const reconnectRef = useRef<ReturnType<typeof setTimeout>>()
+  const reconnectRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   const connect = () => {
     const wsUrl = window.location.origin.replace('http', 'ws').replace('5173', '8000') + '/ws/live'

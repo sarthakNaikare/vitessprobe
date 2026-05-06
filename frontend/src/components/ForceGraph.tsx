@@ -33,7 +33,7 @@ interface Props {
 export default function ForceGraph({ nodes, edges, onNodeClick }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const animRef = useRef<number>()
+  const animRef = useRef<number | undefined>(undefined)
   const stateRef = useRef<{ nodes: Node[], edges: Edge[], dragging: Node | null, pulse: number }>({
     nodes: [], edges: [], dragging: null, pulse: 0
   })
