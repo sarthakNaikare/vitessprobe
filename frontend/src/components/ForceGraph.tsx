@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface Node {
   id: string
@@ -85,7 +85,6 @@ export default function ForceGraph({ nodes, edges, onNodeClick }: Props) {
 
     const NODE_R = 32
 
-    const drawRoundRect = (x: number, y: number, w: number, h: number, r: number) => {
       ctx.beginPath()
       ctx.moveTo(x + r, y)
       ctx.lineTo(x + w - r, y)
