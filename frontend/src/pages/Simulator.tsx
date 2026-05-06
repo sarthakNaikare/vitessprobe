@@ -13,8 +13,7 @@ export default function Simulator() {
   const [result, setResult] = useState<any>(null)
 
   const { data: scenarios } = useQuery({
-    queryKey: ['scenarios'],
-    queryFn: simulatorApi.getScenarios,
+    queryKey: ['scenarios'], queryFn: simulatorApi.getScenarios,
   })
 
   const { mutate: inject, isPending } = useMutation({
@@ -32,104 +31,96 @@ export default function Simulator() {
     onSuccess: () => {
       setResult(null)
       queryClient.invalidateQueries({ queryKey: ['incidents'] })
-      queryClient.invalidateQueries({ queryKey: ['incidents-all'] })
       queryClient.invalidateQueries({ queryKey: ['cluster-health'] })
     },
   })
 
-  const intensityColor = intensity >= 8 ? 'text-red-600' : intensity >= 5 ? 'text-yellow-600' : 'text-green-600'
+  const intensityColor = intensity >= 8 ? '#C0392B' : intensity >= 5 ? '#B87333' : '#27AE60'
   const intensityLabel = intensity >= 8 ? 'Critical' : intensity >= 5 ? 'High' : intensity >= 3 ? 'Medium' : 'Low'
 
   return (
-    <div className="p-8 max-w-4xl">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-simulator min-h-screen p-8 max-w-4xl">
+      <div className="flex items-center justify-between mb-8 animate-fade-up">
         <div>
-          <h1 className="text-xl font-semibold text-stone-800">Incident Simulator</h1>
-          <p className="text-sm text-stone-400 font-mono mt-0.5">
-            Inject synthetic failures and watch VitessProbe diagnose them
-          </p>
+          <h1 className="font-display text-2xl font-semibold" style={{color:'#2C1810'}}>Incident Simulator</h1>
+          <p className="font-mono text-xs mt-1" style={{color:'#A89880'}}>Inject synthetic failures and watch VitessProbe diagnose them</p>
         </div>
-        <button
-          onClick={() => reset()}
-          disabled={resetting}
-          className="flex items-center gap-1.5 text-xs border border-stone-200 px-3 py-1.5 rounded-md hover:bg-stone-50 transition-colors text-stone-500"
-        >
-          <RotateCcw size={12} className={resetting ? 'animate-spin' : ''} />
-          Reset simulated incidents
+        <button onClick={() => reset()} disabled={resetting}
+          className="hover-emboss flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md"
+          style={{border:'0.5px solid #E8DDD0',color:'#8B7355',background:'#FFFFFF'}}>
+          <RotateCcw size={12} className={resetting ? 'animate-spin' : ''} /> Reset
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        {/* Scenario selector */}
-        <div className="col-span-2">
-          <p className="text-xs font-mono text-stone-400 uppercase tracking-wide mb-3">Select Scenario</p>
-          <div className="flex flex-col gap-2">
-            {(scenarios || []).map(s => (
-              <button
-                key={s.id}
-                onClick={() => setSelected(s.id)}
-                className={`text-left px-4 py-3 rounded-lg border transition-all ${
-                  selected === s.id
-                    ? 'bg-indigo-50 border-indigo-300 text-indigo-700'
-                    : 'bg-white border-stone-200 hover:border-stone-300 text-stone-600'
-                }`}
-              >
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span>{s.icon}</span>
-                  <span className="text-sm font-medium">{s.name}</span>
-                </div>
-                <p className="text-xs text-current opacity-60 ml-6">{s.description}</p>
-              </button>
-            ))}
-          </div>
+      <div className="grid grid-cols-3 gap-4 mb-5">
+        {/* Scenarios */}
+        <div className="col-span-2 flex flex-col gap-2">
+          <p style={{fontSize:10,color:'#A89880',fontFamily:'JetBrains Mono',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:4}}>Select Scenario</p>
+          {(scenarios || []).map((s, i) => (
+            <button key={s.id} onClick={() => setSelected(s.id)}
+              className="hover-lift text-left px-4 py-3 rounded-lg animate-fade-up"
+              style={{
+                border: selected===s.id ? '1.5px solid #B87333' : '0.5px solid #E8DDD0',
+                background: selected===s.id ? '#FEF3E2' : '#FFFFFF',
+                animationDelay: `${i*0.05}s`,
+                transition:'all 0.2s ease',
+              }}>
+              <div className="flex items-center gap-2 mb-0.5">
+                <span style={{fontSize:14}}>{s.icon}</span>
+                <span className="text-sm font-semibold" style={{color: selected===s.id ? '#B87333' : '#2C1810'}}>{s.name}</span>
+              </div>
+              <p style={{fontSize:11,color:'#8B7355',marginLeft:22,lineHeight:1.5}}>{s.description}</p>
+            </button>
+          ))}
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {/* Intensity */}
-          <div className="card p-4">
-            <p className="text-xs font-mono text-stone-400 uppercase tracking-wide mb-3">Intensity</p>
+          <div className="card p-4 animate-scale-in" style={{animationDelay:'0.1s'}}>
+            <p style={{fontSize:10,color:'#A89880',fontFamily:'JetBrains Mono',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:12}}>Intensity</p>
             <div className="text-center mb-3">
-              <span className={`text-3xl font-semibold ${intensityColor}`}>{intensity}</span>
-              <span className="text-stone-400 text-sm">/10</span>
-              <p className={`text-xs font-mono mt-0.5 ${intensityColor}`}>{intensityLabel}</p>
+              <span style={{fontSize:36,fontWeight:700,color:intensityColor,fontFamily:'Inter'}}>{intensity}</span>
+              <span style={{color:'#A89880',fontSize:14}}>/10</span>
+              <p style={{fontSize:11,fontFamily:'JetBrains Mono',color:intensityColor,marginTop:2}}>{intensityLabel}</p>
             </div>
-            <input
-              type="range" min={1} max={10} value={intensity}
+            <input type="range" min={1} max={10} value={intensity}
               onChange={e => setIntensity(Number(e.target.value))}
-              className="w-full accent-indigo-600"
-            />
-            <div className="flex justify-between text-2xs text-stone-300 font-mono mt-1">
+              style={{width:'100%',accentColor:'#B87333'}} />
+            <div className="flex justify-between" style={{fontSize:9,color:'#D4C4B0',fontFamily:'JetBrains Mono',marginTop:4}}>
               <span>Low</span><span>Critical</span>
             </div>
           </div>
 
           {/* Target shard */}
-          <div className="card p-4">
-            <p className="text-xs font-mono text-stone-400 uppercase tracking-wide mb-2">Target Shard</p>
+          <div className="card p-4 animate-scale-in" style={{animationDelay:'0.15s'}}>
+            <p style={{fontSize:10,color:'#A89880',fontFamily:'JetBrains Mono',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:8}}>Target Shard</p>
             <div className="flex flex-col gap-1.5">
-              {['-40', '40-80', '80-'].map(s => (
-                <button
-                  key={s}
-                  onClick={() => setShard(s)}
-                  className={`text-xs font-mono px-3 py-1.5 rounded border transition-colors ${
-                    shard === s
-                      ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
-                      : 'border-stone-200 text-stone-500 hover:bg-stone-50'
-                  }`}
-                >
+              {['-40','40-80','80-'].map(s => (
+                <button key={s} onClick={() => setShard(s)}
+                  className="text-xs py-1.5 rounded-md transition-colors"
+                  style={{
+                    fontFamily:'JetBrains Mono',
+                    border: shard===s ? '1.5px solid #B87333' : '0.5px solid #E8DDD0',
+                    background: shard===s ? '#FEF3E2' : '#F7F3ED',
+                    color: shard===s ? '#B87333' : '#8B7355',
+                  }}>
                   shard {s}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Inject button */}
-          <button
-            onClick={() => inject()}
-            disabled={!selected || isPending}
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-sm"
-          >
+          {/* Inject */}
+          <button onClick={() => inject()} disabled={!selected || isPending}
+            className="hover-lift py-3 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 animate-scale-in"
+            style={{
+              background: selected ? '#2C1810' : '#E8DDD0',
+              color: selected ? '#F7F3ED' : '#A89880',
+              animationDelay:'0.2s',
+              transition:'all 0.2s ease',
+              border:'none',
+            }}>
             {isPending
               ? <><Loader2 size={15} className="animate-spin" /> Injecting...</>
               : <><Zap size={15} /> Inject Failure</>
@@ -138,20 +129,19 @@ export default function Simulator() {
         </div>
       </div>
 
-      {/* Result */}
       {result && (
-        <div className="card p-5 border-indigo-200 bg-indigo-50">
+        <div className="card p-5 animate-scale-in"
+          style={{borderColor:'#B87333',background:'linear-gradient(135deg,#FEF3E2,#FFFBF5)'}}>
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-medium text-indigo-800">✓ Incident injected successfully</p>
-            <button
-              onClick={() => navigate(`/incidents/${result.incident_id}`)}
-              className="flex items-center gap-1.5 text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-md hover:bg-indigo-700 transition-colors"
-            >
+            <p className="text-sm font-semibold" style={{color:'#B87333'}}>✓ Incident injected successfully</p>
+            <button onClick={() => navigate(`/incidents/${result.incident_id}`)}
+              className="hover-lift flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md"
+              style={{background:'#2C1810',color:'#F7F3ED',border:'none'}}>
               View incident <ArrowRight size={11} />
             </button>
           </div>
-          <p className="text-xs text-indigo-600 font-mono">{result.message}</p>
-          <p className="text-2xs text-indigo-400 font-mono mt-1">ID: {result.incident_id}</p>
+          <p className="font-mono text-xs" style={{color:'#8B7355'}}>{result.message}</p>
+          <p style={{fontSize:9,color:'#A89880',fontFamily:'JetBrains Mono',marginTop:4}}>ID: {result.incident_id}</p>
         </div>
       )}
     </div>
